@@ -1,17 +1,25 @@
 {
-	"author": "Charlton Roberts",
-	"name": "mw-dictionary",
-	"description": "Simple wrapper for the Merriam-Webster dictionary API found at dictionaryapi.com",
-	"version": "0.0.1",
-	"repository": {
-		"url":"https://github.com/charltoons/mw-dictionary.git"
-	},
-	"main": "./lib/main",
-	"bin": {
-		"mw-dictionary": "./bin/mw-dictionary"
-	},
-	"dependencies": {},
-	"engines":{
-		"node":"*"
-	}
-} 
+  "author": "Charlton Roberts",
+  "name": "mw-dictionary",
+  "description": "Simple wrapper for the Merriam-Webster dictionary API found at dictionaryapi.com",
+  "version": "0.0.1",
+  "keywords": [
+    "dictionary",
+    "words",
+    "api"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/charltoons/mw-dictionary.git"
+  },
+  "main": "dictionary",
+  "bin": {
+    "mw-dictionary": "./bin/mw-dictionary"
+  },
+  "dependencies": {
+    "xml2js": "~0.2.6"
+  },
+  "engines": {
+    "node": "*"
+  }
+}
