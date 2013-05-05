@@ -1,3 +1,6 @@
+//To run:
+//      $ node example.js [your-merriam-webster-api-key]
+
 var Dictionary = require('./dictionary'),
 	
 	//pass the constructor a config object with your key
