@@ -2,7 +2,7 @@
   "author": "Charlton Roberts",
   "name": "mw-dictionary",
   "description": "Simple wrapper for the Merriam-Webster dictionary API found at dictionaryapi.com",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "keywords": [
     "dictionary",
     "words",
@@ -13,9 +13,6 @@
     "url": "https://github.com/charltoons/mw-dictionary.git"
   },
   "main": "dictionary",
-  "bin": {
-    "mw-dictionary": "./bin/mw-dictionary"
-  },
   "dependencies": {
     "xml2js": "~0.2.6",
     "request": "~2.21.0"
