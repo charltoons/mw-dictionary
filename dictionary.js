@@ -19,19 +19,40 @@ Dictionary.prototype = {
             if (error === null) {
                 var results = [];
 
-                //remove erroneous results (doodle != Yankee Doodle)
-                var entries = result.entry_list.entry;
-                for (var i=0; i<entries.length; i++){
-                    if (entries[i].ew == word) {
+                if (result.entry_list.entry != undefined) {
+                    var entries = result.entry_list.entry;
+                    for (var i=0; i<entries.length; i++){
 
-                        //construct a more digestable object
-                        results.push({
-                            partOfSpeech: entries[i].fl,
-                            definition: entries[i].def[0].dt
-                        });
+                        //remove erroneous results (doodle != Yankee Doodle)
+                        if (entries[i].ew == word) {
+
+                            //construct a more digestable object
+                            var definition = entries[i].def[0].dt;
+                            var partOfSpeech = entries[i].fl;
+                            switch (typeof definition) {
+                                case "object":
+                                    for (var i=0; i<definition.length; i++){
+                                        var definitionStr = "";
+                                        if (definition[i]["_"].length > 1) definitionStr += " "+definition[i]["_"];
+                                    }
+                                    definition = definitionStr;
+                                    break;
+                                case "string":
+                                default:
+                                    break;
+                            }
+                            results.push({
+                                partOfSpeech: partOfSpeech,
+                                definition: definition
+                            });
+                        }
                     }
+                    callback(null, results);
                 }
-                callback(null, results);
+                else if (result.entry_list.suggestion != undefined) {
+                    callback('suggestions', result.entry_list.suggestion);
+                }
+                
             }
             else callback(error);
         });
@@ -43,7 +64,11 @@ Dictionary.prototype = {
             if (!error && response.statusCode == 200) {
                 xml.parseString(body, function(error, result){
                     if (error === null) callback(null, result);
-                    else callback('XML Parsing error.');
+                    else if (response.statusCode != 200) console.log(response.statusCode);
+                    else {
+                        console.log(error);
+                        callback('XML Parsing error.');
+                    }
                 });
             }
             else callback('API connection error.')
