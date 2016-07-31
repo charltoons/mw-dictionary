@@ -2,7 +2,7 @@
   "author": "Charlton Roberts",
   "name": "mw-dictionary",
   "description": "Simple wrapper for the Merriam-Webster dictionary API found at dictionaryapi.com",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "keywords": [
     "dictionary",
     "words",
