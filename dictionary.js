@@ -45,7 +45,15 @@ Dictionary.prototype = {
 
                             results.push({
                                 partOfSpeech: entries[i].fl,
-                                definition: entries[i].def[0].dt.filter(entry => typeof(entry) === 'string').join('\n')
+                                definition: entries[i].def[0].dt.map(entry => {
+                                    if (typeof(entry) === 'string') {
+                                        return entry;
+                                    }
+
+                                    if (entry['_']) {
+                                        return entry['_'];
+                                    }
+                                }).join('\n')
                             });
                         }
                     }
