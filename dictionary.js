@@ -1,3 +1,5 @@
+var DEBUG = false;
+
 //  Endpoints
 var MW_ROOT = 'http://www.dictionaryapi.com/api/v1/references/collegiate/xml/';
 
@@ -17,6 +19,11 @@ Dictionary.prototype = {
     define: function(word, callback){
         this.raw(word, function(error, result){
             if (error === null) {
+
+                if (DEBUG) {
+                    console.log('result', JSON.stringify(result, null, 2));
+                }
+
                 var results = [];
 
                 if (result.entry_list.entry != undefined) {
@@ -27,27 +34,23 @@ Dictionary.prototype = {
                         if (entries[i].ew == word) {
 
                             //construct a more digestable object
+                            var definition = [];
                             var definition = entries[i].def[0].dt;
                             var partOfSpeech = entries[i].fl;
-                            switch (typeof definition) {
-                                case "object":
-                                    for (var i=0; i<definition.length; i++){
-                                        var definitionStr = "";
-                                        if (definition[i]["_"].length > 1) definitionStr += " "+definition[i]["_"];
-                                    }
-                                    definition = definitionStr;
-                                    break;
-                                case "string":
-                                default:
-                                    break;
+
+                            if (DEBUG) {
+                                console.log('definition', JSON.stringify(definition, null, 2));
+                                console.log('partOfSpeech', partOfSpeech);
                             }
+
                             results.push({
-                                partOfSpeech: partOfSpeech,
-                                definition: definition
+                                partOfSpeech: entries[i].fl,
+                                definition: entries[i].def[0].dt.filter(entry => typeof(entry) === 'string').join('\n')
                             });
                         }
                     }
-                    callback(null, results);
+
+                    callback(null, results.filter(entry => entry.definition));
                 }
                 else if (result.entry_list.suggestion != undefined) {
                     callback('suggestions', result.entry_list.suggestion);
@@ -60,13 +63,16 @@ Dictionary.prototype = {
 
     //return a javascript object equivalent to the XML response from M-W
     raw: function(word, callback){
-        request(this.getSearchUrl(word), function (error, response, body) {
+        var url = this.getSearchUrl(word);
+        request(url, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 xml.parseString(body, function(error, result){
                     if (error === null) callback(null, result);
                     else if (response.statusCode != 200) console.log(response.statusCode);
                     else {
                         console.log(error);
+                        console.log('url: ' + url);
+                        console.log('body: ' + body);
                         callback('XML Parsing error.');
                     }
                 });
